@@ -1,0 +1,151 @@
+import random
+import sys
+import time
+from colorama import *
+
+IMS = {
+    "Admin Credentials":{
+        "Admin Name":"",
+        "Admin Phone NO":"",
+        "Admin Gmail":"",
+        "Username":"",
+        "Password":"",
+    }
+}
+
+def main():
+    welcome_msg()
+    while True:
+        print("1. SingUp")
+        print("2. LogIn")
+        print("3. Exit>")
+        old_new = input()
+
+        if old_new == "1":
+            singup()
+        elif old_new == "2":
+            print("Login")
+        elif old_new == "3":
+            print("You're Welcome")
+            break
+        else:
+            print("Choose the right option and Try again>>")
+    
+def singup():
+    start = "Let's start with some details>>>"
+    delay=0.05
+    for char in start:
+        sys.stdout.write(f"{Fore.LIGHTBLUE_EX}{char}{Style.RESET_ALL}")
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()
+    
+    admin_name = input("Enter Name>>")
+    admin_phone_no = PhNo_Validation()
+    admin_email = Gmail_Validation()
+    username = input("Enter Username>>")
+    password = Password_Validation()
+    
+    print(f"{Fore.GREEN}Admin Credentials Successfully Added.{Style.RESET_ALL}")
+
+def PhNo_Validation():
+    while True:
+        try:
+            phno_input = int(input("Enter Your Phone NO>>"))
+            if len(str(phno_input)) == 10:
+                return phno_input
+            else:
+                print(f"{Fore.RED}Invalid input {Style.RESET_ALL}{phno_input}{Fore.RED}. Please enter a valid phone number.{Style.RESET_ALL}")
+        except ValueError as ve:
+            entered_value = ve.args[0].split(":")[1].strip()
+            print(f"{Fore.RED}Invalid input {Style.RESET_ALL}{entered_value}{Fore.RED}. Please enter a valid phone number.{Style.RESET_ALL}")    
+
+def Gmail_Validation():
+    while True:
+        email_input = input("Please Enter Your Gmail Address>>")
+        email_input.lower()
+        if "@" in email_input and "gmail.com" in email_input:
+            return email_input.lower()
+            break
+        else:
+            print("Gmail address is Wrong>>")
+            print("Please Try Again>>")
+
+            
+def Password_Validation():
+    while True:
+        A_Z, a_z, numbers = [i for i in range(65,91)], [i for i in range(97,123)], [i for i in range(48,58)]
+        sym1, sym2, sym3, sym4 = [i for i in range(32,48)], [i for i in range(58,65)], [i for i in range(91,97)], [i for i in range(123,127)]
+        sym_all = sym1+sym2+sym3+sym4
+        # Rules of Password Creation
+        print(f"{Fore.RED}NOTE:{Style.RESET_ALL}")
+        note = '''
+        1. Your password must be at least 8 characters long.
+        2. Your password must contain at least one Capital Character.
+        3. Your password must contain at least Three Small Character.
+        4. Your password must contain at least one symbol #, @, $...
+        5. Your password must contain at least Three Numbers.
+        '''
+        delay=0.01
+        for char in note:
+            sys.stdout.write(f"{Fore.LIGHTBLUE_EX}{char}{Style.RESET_ALL}")
+            sys.stdout.flush()
+            time.sleep(delay)
+        
+        login_key = input("Create Your Password>>")
+        login_key_list = list(login_key)
+        len_8, ccap_ch, csmall_ch, csymbols, cnumbers, cspace = 0, 0, 0, 0, 0, 0
+        if len(login_key_list) >= 8:
+            len_8 += len(login_key_list)
+            for i in login_key_list:
+                if ord(i) in A_Z:
+                    ccap_ch += 1
+                elif i == ' ':
+                    cspace += 1
+                elif ord(i) in a_z:
+                    csmall_ch += 1
+                elif ord(i) in sym_all:
+                    csymbols += 1
+                elif ord(i) in numbers:
+                    cnumbers += 1
+                    
+        if len_8 >= 8:
+            if ccap_ch >= 1:
+                if csmall_ch >= 3:
+                    if csymbols >= 1:
+                        if cnumbers >= 3:
+                            print(f"{Fore.LIGHTGREEN_EX}Good To Go>>{Style.RESET_ALL}")
+                            
+                        else:
+                            print("Your password must contain at least Three Numbers>>")
+                            print("Try Again>>")
+                    else:
+                        print("Your password must contain at least one symbol>>")
+                        print("Try Again>>")
+                else:
+                    print("Your password must contain at least Three Small Character>>")
+                    print("Try Again>>")
+            else:
+                print("Your password must contain at least one Capital Character>>")
+                print("Try Again>>")
+        else:
+            print("Your password must be at least 8 characters long>>")
+            print("Try Again>>")
+            
+        while True:
+            re_enter = input("Enter Your Password Again>")
+            if login_key == re_enter:
+                return login_key
+                break
+            else:
+                print("Password Does not match, Try Again>>")
+        break
+
+def welcome_msg():
+    welcome = "Welcome to Institute Management System>"
+    delay=0.03
+    for char in welcome:
+        sys.stdout.write(f"{Fore.LIGHTBLUE_EX}{char}{Style.RESET_ALL}")
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()
